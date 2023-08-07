@@ -1,0 +1,10 @@
+These emojies were designed by Google (https://github.com/googlefonts/noto-emoji).
+(Bomb.png, Flag.png & Number0-10.png)
+
+These emojies are licensed under the Apache license, version 2.0.
+https://www.apache.org/licenses/LICENSE-2.0
+
+=====
+
+These sprites were designed by いらすとや (https://www.irasutoya.com/).
+(GameClear.png & GameOver.png)
