@@ -178,8 +178,7 @@ void Game::UpdateGame()
 	mTicksCount = SDL_GetTicks();
 
 	// ゲームクリアか判定
-	bool isClear = false;
-	isClear = CheckBoard();
+	bool isClear = CheckBoard();
 	if (isClear)
 	{
 		mIsGameClear = true;
@@ -205,41 +204,16 @@ void Game::GenerateOutput()
 
 			if (mOpenBoard[x][y])
 			{
-				switch (mMineNumBoard[x][y])
+				int num = mMineNumBoard[x][y];
+				if (0 <= num && num <= 10)
 				{
-				case 1:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_1.png"], nullptr, &mPanel);
-					break;
-				case 2:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_2.png"], nullptr, &mPanel);
-					break;
-				case 3:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_3.png"], nullptr, &mPanel);
-					break;
-				case 4:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_4.png"], nullptr, &mPanel);
-					break;
-				case 5:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_5.png"], nullptr, &mPanel);
-					break;
-				case 6:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_6.png"], nullptr, &mPanel);
-					break;
-				case 7:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_7.png"], nullptr, &mPanel);
-					break;
-				case 8:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_8.png"], nullptr, &mPanel);
-					break;
-				case 9:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_9.png"], nullptr, &mPanel);
-					break;
-				case 10:
-					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_10.png"], nullptr, &mPanel);
-					break;
-				default:
+					std::string s = "Assets/Number_";
+					s += std::to_string(num) + ".png";
+					SDL_RenderCopy(mRenderer, mTextures[s], nullptr, &mPanel);
+				} 
+				else 
+				{
 					SDL_RenderCopy(mRenderer, mTextures["Assets/Number_0.png"], nullptr, &mPanel);
-					break;
 				}
 			}
 			if (mFlagBoard[x][y])
@@ -257,7 +231,7 @@ void Game::GenerateOutput()
 	{
 		SDL_RenderCopy(mRenderer, mTextures["Assets/GameClear.png"], nullptr, &r);
 	}
-	if (mIsGameOver)
+	else if (mIsGameOver)
 	{
 		SDL_RenderCopy(mRenderer, mTextures["Assets/GameOver.png"], nullptr, &r);
 	}
@@ -365,15 +339,13 @@ void Game::GenerateBoard(int exceptX, int exceptY)
 		// 爆弾を設置
 		mMineBoard[x][y] = true;
 		// 爆弾の周りの数字をインクリメント
-		mMineNumBoard[x - 1][y - 1] += 1;
-		mMineNumBoard[x][y - 1] += 1;
-		mMineNumBoard[x + 1][y - 1] += 1;
-		mMineNumBoard[x - 1][y] += 1;
-		mMineNumBoard[x + 1][y] += 1;
-		mMineNumBoard[x - 1][y + 1] += 1;
-		mMineNumBoard[x][y + 1] += 1;
-		mMineNumBoard[x + 1][y + 1] += 1;
-
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				mMineNumBoard[x + i][y + j] += 1;
+			}
+		}
 		i++;
 	}
 }
@@ -391,14 +363,13 @@ void Game::OpenPanel(int x, int y)
 	mOpenBoard[x][y] = true;
 	if (!mMineBoard[x][y] && !mMineNumBoard[x][y])
 	{
-		OpenPanel(x - 1, y - 1);
-		OpenPanel(x    , y - 1);
-		OpenPanel(x + 1, y - 1);
-		OpenPanel(x - 1, y    );
-		OpenPanel(x + 1, y    );
-		OpenPanel(x - 1, y + 1);
-		OpenPanel(x    , y + 1);
-		OpenPanel(x + 1, y + 1);
+		for (int i = -1; i <= 1; i++)
+		{
+			for (int j = -1; j <= 1; j++)
+			{
+				OpenPanel(x + i, y + j);
+			}
+		}
 	}
 }
 
