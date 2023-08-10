@@ -343,6 +343,10 @@ void Game::GenerateBoard(int exceptX, int exceptY)
 		{
 			for (int j = -1; j <= 1; j++)
 			{
+				if (i == 0 && j == 0)
+				{
+					continue;
+				}
 				mMineNumBoard[x + i][y + j] += 1;
 			}
 		}
@@ -367,6 +371,10 @@ void Game::OpenPanel(int x, int y)
 		{
 			for (int j = -1; j <= 1; j++)
 			{
+				if (i == 0 && j == 0) 
+				{
+					continue;
+				}
 				OpenPanel(x + i, y + j);
 			}
 		}
